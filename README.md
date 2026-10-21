@@ -29,15 +29,22 @@ La primera prueba está preparada para fallar: es el punto de partida de la **Mi
 Responde aquí:
 
 1. ¿Dónde almacenarías ahora el estado `completada` de una tarea?
+   ¿?
+
 2. ¿Qué ocurriría si mañana cada tarea necesita prioridad, fecha o responsable?
+   COn strings habria que rediseñar la estructura y cada función que accede a `tareas[i]`. Con objetos basta agregar una propiedad sin reescribir el resto.
+
 3. ¿Qué parte del código representa datos y qué parte representa interfaz?
-4. ¿Qué comportamiento debemos conservar durante el refactor?
+   _Datos:_ Aqui es el arrary `tareas` y sus elementos.
+   _Intefaz:_ Metemos lo que es `mostrarTreas()`, `querySelector(#task-list)`, `innerHTML` y las plantillas
+
+4. ¿Qué comportamiento debemos conservar durante el refactor? Los tres que mencionaremos.
 
 ### Tres comportamientos observables que NO deben cambiar
 
-1. 
-2. 
-3. 
+1. Al escribir un título válido y pulsar **Agregar**, la tarea aparece al final de la lista y el campo de texto se limpia.
+2. Al enviar un título vacío o sólo con espacios, la tarea **no** se agrega y se muestra un mensaje de error.
+3. Al pulsar **Eliminar**, la tarea desaparece de la lista y el resumen se actualiza.
 
 ## Registro RED → GREEN → REFACTOR
 
