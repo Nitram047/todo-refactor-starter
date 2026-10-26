@@ -48,6 +48,22 @@ describe("agregarTarea", () => {
   });
 });
 // MISIÓN 4: prueba id existente e inexistente para buscarTarea().
+
+describe("buscarTarea", () => {
+  it("encuentra una tarea con un id existente", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true }
+    ];
+    expect(buscarTarea(tareas, 2)).toEqual({ id: 2, titulo: "B", completada: true });
+  });
+
+  it("devuelve undefined cuando se busca un id inexistente", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    expect(buscarTarea(tareas, 99)).toBeUndefined();
+  });
+});
+
 // MISIÓN 5: prueba colección mixta, sin coincidencias y vacía.
 // MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
