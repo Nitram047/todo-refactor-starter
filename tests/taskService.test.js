@@ -65,6 +65,36 @@ describe("buscarTarea", () => {
 });
 
 // MISIÓN 5: prueba colección mixta, sin coincidencias y vacía.
+
+describe("obtenerPendientes y obtenerTerminadas", () => {
+  it("filtra pendientes y terminadas en una colección mixta", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true },
+      { id: 3, titulo: "C", completada: false }
+    ];
+    expect(obtenerPendientes(tareas)).toEqual([
+      { id: 1, titulo: "A", completada: false },
+      { id: 3, titulo: "C", completada: false }
+    ]);
+    expect(obtenerTerminadas(tareas)).toEqual([
+      { id: 2, titulo: "B", completada: true }
+    ]);
+  });
+
+  it("devuelve [] cuando no hay coincidencias", () => {
+    const soloPendientes = [{ id: 1, titulo: "A", completada: false }];
+    const soloTerminadas = [{ id: 2, titulo: "B", completada: true }];
+    expect(obtenerTerminadas(soloPendientes)).toEqual([]);
+    expect(obtenerPendientes(soloTerminadas)).toEqual([]);
+  });
+
+  it("devuelve [] cuando la colección está vacía", () => {
+    expect(obtenerPendientes([])).toEqual([]);
+    expect(obtenerTerminadas([])).toEqual([]);
+  });
+});
+
 // MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
