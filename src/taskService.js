@@ -6,16 +6,14 @@
  * cada cambio.
  */
 
-import { describe } from "vitest";
-
 // MISIÓN 2
 export function crearTarea(id, titulo) {
-  return{id, titulo, completada:false};
+  return { id, titulo, completada: false };
 }
 
 // MISIÓN 3
 export function agregarTarea(tareas, nuevaTarea) {
-  return[...tareas,nuevaTarea]
+  return [...tareas, nuevaTarea];
 }
 
 // MISIÓN 4

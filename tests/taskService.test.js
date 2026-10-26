@@ -167,12 +167,3 @@ describe("obtenerResumen", () => {
     });
   });
 });
-
-// Los imports anteriores quedan preparados para que construyas la suite de forma incremental.
-void agregarTarea;
-void buscarTarea;
-void obtenerPendientes;
-void obtenerTerminadas;
-void cambiarEstado;
-void eliminarTarea;
-void obtenerResumen;

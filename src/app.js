@@ -32,15 +32,15 @@ let tareas = [
 let siguienteId = 4;
 let filtro = "todas";
 
+function obtenerTareasSegunFiltro(listaTareas, filtroActivo) {
+  if (filtroActivo === "pendientes") return obtenerPendientes(listaTareas);
+  if (filtroActivo === "terminadas") return obtenerTerminadas(listaTareas);
+  return listaTareas;
+}
+
 function render() {
   list.innerHTML = "";
-
-  let tareasVisibles = tareas;
-  if (filtro === "pendientes") {
-    tareasVisibles = obtenerPendientes(tareas);
-  } else if (filtro === "terminadas") {
-    tareasVisibles = obtenerTerminadas(tareas);
-  }
+  const tareasVisibles = obtenerTareasSegunFiltro(tareas, filtro);
 
   tareasVisibles.forEach((tarea) => {
     const li = document.createElement("li");
