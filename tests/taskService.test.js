@@ -96,6 +96,30 @@ describe("obtenerPendientes y obtenerTerminadas", () => {
 });
 
 // MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
+
+describe("cambiarEstado", () => {
+  it("cambia el estado de la tarea con el id correcto sin mutar el original", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    const resultado = cambiarEstado(tareas, 1);
+    expect(resultado).toEqual([{ id: 1, titulo: "A", completada: true }]);
+    expect(tareas[0].completada).toBe(false);
+  });
+
+  it("no altera las demás tareas de la colección", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: false }
+    ];
+    const resultado = cambiarEstado(tareas, 1);
+    expect(resultado[1]).toEqual({ id: 2, titulo: "B", completada: false });
+  });
+
+  it("conserva el contenido de la colección si el id es inexistente", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    expect(cambiarEstado(tareas, 99)).toEqual(tareas);
+  });
+});
+
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
 
