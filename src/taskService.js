@@ -52,3 +52,9 @@ export function obtenerResumen(tareas) {
     terminadas: obtenerTerminadas(tareas).length
   };
 }
+
+// MISIÓN 11
+export function existeTitulo(tareas, titulo) {
+  const normalizado = titulo.trim().toLowerCase();
+  return tareas.some(tarea => tarea.titulo.trim().toLowerCase() === normalizado);
+}

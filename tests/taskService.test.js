@@ -7,7 +7,8 @@ import {
   obtenerTerminadas,
   cambiarEstado,
   eliminarTarea,
-  obtenerResumen
+  obtenerResumen,
+  existeTitulo
 } from "../src/taskService.js";
 
 /*
@@ -165,5 +166,19 @@ describe("obtenerResumen", () => {
       pendientes: 0,
       terminadas: 0
     });
+  });
+});
+
+// MISIÓN 11: evitar títulos duplicados con some().
+
+describe("existeTitulo", () => {
+  it("detecta un título duplicado ignorando mayúsculas y espacios", () => {
+    const tareas = [{ id: 1, titulo: "Diseñar pruebas", completada: false }];
+    expect(existeTitulo(tareas, "  diseñar pruebas ")).toBe(true);
+  });
+
+  it("devuelve false cuando el título no existe", () => {
+    const tareas = [{ id: 1, titulo: "Diseñar pruebas", completada: false }];
+    expect(existeTitulo(tareas, "Refactorizar código")).toBe(false);
   });
 });

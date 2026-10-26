@@ -14,7 +14,8 @@ import {
   obtenerTerminadas,
   cambiarEstado,
   eliminarTarea,
-  obtenerResumen
+  obtenerResumen,
+  existeTitulo
 } from "./taskService.js";
 
 const form = document.querySelector("#task-form");
@@ -62,6 +63,10 @@ form.addEventListener("submit", (event) => {
   const titulo = input.value.trim();
   if (!titulo) {
     message.textContent = "Escribe un título antes de agregar.";
+    return;
+  }
+  if (existeTitulo(tareas, titulo)) {
+    message.textContent = "Ya existe una tarea con ese título.";
     return;
   }
   const nuevaTarea = crearTarea(siguienteId++, titulo);
