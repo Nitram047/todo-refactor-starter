@@ -7,7 +7,8 @@ import {
   obtenerTerminadas,
   cambiarEstado,
   eliminarTarea,
-  obtenerResumen
+  obtenerResumen,
+  existeTitulo
 } from "../src/taskService.js";
 
 /*
@@ -32,17 +33,152 @@ describe("crearTarea", () => {
 });
 
 // MISIÓN 3: agrega al menos dos pruebas para agregarTarea().
+
+describe("agregarTarea", () => {
+  it("agrega una tarea al final", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    const nueva = { id: 2, titulo: "B", completada: false };
+    expect(agregarTarea(tareas, nueva)).toEqual([...tareas, nueva]);
+  });
+ 
+  it("no modifica el array original", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    const resultado = agregarTarea(tareas, { id: 2, titulo: "B", completada: false });
+    expect(resultado).not.toBe(tareas);
+    expect(tareas).toHaveLength(1);
+  });
+});
 // MISIÓN 4: prueba id existente e inexistente para buscarTarea().
+
+describe("buscarTarea", () => {
+  it("encuentra una tarea con un id existente", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true }
+    ];
+    expect(buscarTarea(tareas, 2)).toEqual({ id: 2, titulo: "B", completada: true });
+  });
+
+  it("devuelve undefined cuando se busca un id inexistente", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    expect(buscarTarea(tareas, 99)).toBeUndefined();
+  });
+});
+
 // MISIÓN 5: prueba colección mixta, sin coincidencias y vacía.
+
+describe("obtenerPendientes y obtenerTerminadas", () => {
+  it("filtra pendientes y terminadas en una colección mixta", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true },
+      { id: 3, titulo: "C", completada: false }
+    ];
+    expect(obtenerPendientes(tareas)).toEqual([
+      { id: 1, titulo: "A", completada: false },
+      { id: 3, titulo: "C", completada: false }
+    ]);
+    expect(obtenerTerminadas(tareas)).toEqual([
+      { id: 2, titulo: "B", completada: true }
+    ]);
+  });
+
+  it("devuelve [] cuando no hay coincidencias", () => {
+    const soloPendientes = [{ id: 1, titulo: "A", completada: false }];
+    const soloTerminadas = [{ id: 2, titulo: "B", completada: true }];
+    expect(obtenerTerminadas(soloPendientes)).toEqual([]);
+    expect(obtenerPendientes(soloTerminadas)).toEqual([]);
+  });
+
+  it("devuelve [] cuando la colección está vacía", () => {
+    expect(obtenerPendientes([])).toEqual([]);
+    expect(obtenerTerminadas([])).toEqual([]);
+  });
+});
+
 // MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
+
+describe("cambiarEstado", () => {
+  it("cambia el estado de la tarea con el id correcto sin mutar el original", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    const resultado = cambiarEstado(tareas, 1);
+    expect(resultado).toEqual([{ id: 1, titulo: "A", completada: true }]);
+    expect(tareas[0].completada).toBe(false);
+  });
+
+  it("no altera las demás tareas de la colección", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: false }
+    ];
+    const resultado = cambiarEstado(tareas, 1);
+    expect(resultado[1]).toEqual({ id: 2, titulo: "B", completada: false });
+  });
+
+  it("conserva el contenido de la colección si el id es inexistente", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    expect(cambiarEstado(tareas, 99)).toEqual(tareas);
+  });
+});
+
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
+
+describe("eliminarTarea", () => {
+  it("elimina una tarea con un id existente", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true }
+    ];
+    expect(eliminarTarea(tareas, 1)).toEqual([
+      { id: 2, titulo: "B", completada: true }
+    ]);
+  });
+
+  it("devuelve una colección con los mismos elementos si el id es inexistente", () => {
+    const tareas = [{ id: 1, titulo: "A", completada: false }];
+    expect(eliminarTarea(tareas, 99)).toEqual(tareas);
+  });
+
+  it("devuelve [] con una colección vacía", () => {
+    expect(eliminarTarea([], 1)).toEqual([]);
+  });
+});
+
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
 
-// Los imports anteriores quedan preparados para que construyas la suite de forma incremental.
-void agregarTarea;
-void buscarTarea;
-void obtenerPendientes;
-void obtenerTerminadas;
-void cambiarEstado;
-void eliminarTarea;
-void obtenerResumen;
+describe("obtenerResumen", () => {
+  it("calcula total, pendientes y terminadas en una colección mixta", () => {
+    const tareas = [
+      { id: 1, titulo: "A", completada: false },
+      { id: 2, titulo: "B", completada: true },
+      { id: 3, titulo: "C", completada: false }
+    ];
+    expect(obtenerResumen(tareas)).toEqual({
+      total: 3,
+      pendientes: 2,
+      terminadas: 1
+    });
+  });
+
+  it("devuelve ceros para una colección vacía", () => {
+    expect(obtenerResumen([])).toEqual({
+      total: 0,
+      pendientes: 0,
+      terminadas: 0
+    });
+  });
+});
+
+// MISIÓN 11: evitar títulos duplicados con some().
+
+describe("existeTitulo", () => {
+  it("detecta un título duplicado ignorando mayúsculas y espacios", () => {
+    const tareas = [{ id: 1, titulo: "Diseñar pruebas", completada: false }];
+    expect(existeTitulo(tareas, "  diseñar pruebas ")).toBe(true);
+  });
+
+  it("devuelve false cuando el título no existe", () => {
+    const tareas = [{ id: 1, titulo: "Diseñar pruebas", completada: false }];
+    expect(existeTitulo(tareas, "Refactorizar código")).toBe(false);
+  });
+});
